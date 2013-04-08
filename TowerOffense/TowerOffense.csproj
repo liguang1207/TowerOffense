@@ -112,7 +112,14 @@
   <ItemGroup>
     <Compile Include="Entities\TOActor.cs" />
     <Compile Include="Entities\TOBug.cs" />
+    <Compile Include="Entities\TOCircle.cs" />
+    <Compile Include="Entities\TOItem.cs" />
+    <Compile Include="Entities\TOTower.cs" />
     <Compile Include="Entities\TOWorldInfo.cs" />
+    <Compile Include="Level Editor\TOCountdownTimer.cs" />
+    <Compile Include="Level Editor\TOHUD.cs" />
+    <Compile Include="Level Editor\TOMobSpawner.cs" />
+    <Compile Include="Level Editor\TOTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="TOGame.cs" />
