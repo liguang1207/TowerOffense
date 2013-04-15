@@ -29,6 +29,10 @@ namespace TowerOffense
     /// </summary>
     public class TOGame : Microsoft.Xna.Framework.Game
     {
+        //Constants
+        private const int TOWER_BASE_COST = 10;
+
+
         //TO Objects
         TOWorldInfo WorldInfo = TOWorldInfo.Instance;
 
@@ -173,6 +177,8 @@ namespace TowerOffense
                             {
                                 SpawnZoneCount++;
                                 TTile.CurrentState = TowerState.Spawn;
+                                TOMobSpawner TMS = new TOMobSpawner(TTile);
+                                TTile.Spawner = TMS;
                             }
                             else
                             {
@@ -191,6 +197,7 @@ namespace TowerOffense
                         else if (TTile.CurrentState == TowerState.Spawn)
                         {
                             SpawnZoneCount--;
+                            TTile.Spawner = null;
                             if (EndZoneCount < 2)
                             {
                                 EndZoneCount++;
@@ -215,7 +222,7 @@ namespace TowerOffense
             {
                 if (Timer == null)
                 {
-                    Timer = new TOCountdownTimer(90);
+                    Timer = new TOCountdownTimer(10);
                 }
                 else if (Timer.Running)
                 {
@@ -225,24 +232,80 @@ namespace TowerOffense
                 {
                     Timer.Stop();
                     CurrentGameState = GameState.Wave_Running;
+
+                    //Start Wave
+                    foreach (TOActor aActor in WorldInfo.AllActors)
+                    {
+                        if (aActor is TOTile)
+                        {
+                            TOTile aTile = aActor as TOTile;
+                            if (aTile.CurrentState == TowerState.Spawn)
+                            {
+                                aTile.Spawner.StartWave(Wave * 10);
+                            }
+                        }
+                    }
                 }
 
                 if (T != null && T is TOTile)
                 {
                     TOTile TTile = (TOTile)T;
-                    if (TTile.CurrentState == TowerState.Wall && TTile.Tower == null && WorldInfo.Money > 10)
+                    if (TTile.CurrentState == TowerState.Wall && TTile.Tower == null && WorldInfo.Money >= TOWER_BASE_COST)
                     {
                         TOTower TTower = new TOTower(TTile.Position, GetSprite("Tower_Generic"));
                         TTile.Tower = TTower;
 
-                        WorldInfo.Money -= 10;
+                        WorldInfo.Money -= TOWER_BASE_COST;
                     }
                 }
             }
             else if (CurrentGameState == GameState.Wave_Running)
             {
-                //Get Path
-                //Get
+                //Start Wave
+                Boolean RoundOver = true;
+                foreach (TOActor aActor in WorldInfo.AllActors)
+                {
+                    if (aActor is TOTile)
+                    {
+                        TOTile aTile = aActor as TOTile;
+                        if (aTile.CurrentState == TowerState.Spawn && !aTile.Spawner.DoneSpawning)
+                        {
+                            RoundOver = false;
+                        }
+                    }
+                    else if (aActor is TOBug)
+                    {
+                        RoundOver = false;
+                    }
+                }
+
+                if (RoundOver)
+                {
+                    CurrentGameState = GameState.Wave_Over;
+                }
+
+                WorldInfo.Update(aGameTime);
+                
+            }
+            else if (CurrentGameState == GameState.Wave_Over)
+            {
+                foreach (TOActor aActor in WorldInfo.AllActors)
+                {
+                    if (aActor is TOProjectile)
+                    {
+                        aActor.bDeleteMe = true;
+                    }
+                    else if (aActor is TOTower)
+                    {
+                        aActor.Rotation = 0;
+                        TOTower aTower = aActor as TOTower;
+                        aTower.ResetProjectiles();
+                    }
+                }
+
+                Timer = new TOCountdownTimer(10);
+                CurrentGameState = GameState.Wave_Setup;
+                Wave++;
             }
             else
             {
@@ -305,6 +368,12 @@ namespace TowerOffense
         {
             return Content.Load<Texture2D>(TextureName);
         }
+
+        public SoundEffect GetSoundEffect(String EffectName)
+        {
+            return Content.Load<SoundEffect>(EffectName);
+        }
+
 
         public SpriteFont GetFont(String FontName)
         {

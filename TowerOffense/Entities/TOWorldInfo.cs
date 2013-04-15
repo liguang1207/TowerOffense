@@ -19,6 +19,7 @@ namespace TowerOffense.Entities
         private ArrayList pActors = new ArrayList();
         private TOGame pGame = null;
         private TOTile[,] pGameGrid = new TOTile[10, 10];
+        private List<TOTile> pPath = new List<TOTile>();
         private Boolean pDebugMode = true;
         private double pMoney = 100.0;
 
@@ -54,6 +55,21 @@ namespace TowerOffense.Entities
             set { pMoney = value; }
         }
 
+        public List<TOTile> Path
+        {
+            get { return pPath; }
+        }
+
+        public void GetPath()
+        {
+
+        }
+
+        public void DestroyActor(TOActor aActor)
+        {
+            pActors.Remove(aActor);
+        }
+
         public void RegisterGame(TOGame aGame)
         {
             pGame = aGame;
@@ -79,9 +95,18 @@ namespace TowerOffense.Entities
 
         public void Update(GameTime aGameTime)
         {
-            foreach(TOActor Actor in pActors)
+            for (int i = 0; i < pActors.Count; i++)
             {
-                Actor.Update(aGameTime);
+                TOActor aActor = pActors[i] as TOActor;
+
+                if (aActor != null)
+                {
+                    aActor.Update(aGameTime);
+                }
+                else if (aActor == null || aActor.bDeleteMe)
+                {
+                    pActors.RemoveAt(i);
+                }
             }
         }
 

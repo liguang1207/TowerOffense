@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using TowerOffense.Level_Editor;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,6 +21,9 @@ namespace TowerOffense.Entities
         protected float pRotation;
         protected TOActor pTarget;
 
+        public Boolean bDeleteMe = false;
+        
+
         public static int MAX_WIDTH = 64;
 
         public TOActor(Vector2 aPosition, Texture2D aTexture)
@@ -32,36 +36,65 @@ namespace TowerOffense.Entities
 
         public virtual void Update(GameTime aGameTime)
         {
-            double TurnToTarget = GetTurnDifference();
-            if (TurnToTarget == 0)
+            if (OffWorld())
             {
+                bDeleteMe = true;
+                WorldInfo.DestroyActor(this);
+            }
+
+            if (!bDeleteMe)
+            {
+                if (pTarget != null)
+                {
+                    pRotation = GetTurnDifference();
+                }
+
                 if (pVelocity > 0)
                 {
                     //Update Velocity
-                    pPosition.X = (float)Math.Cos(pRotation) * pVelocity;
-                    pPosition.Y = (float)Math.Sin(pRotation) * pVelocity;
+                    pPosition.X += (float)Math.Cos(pRotation) * pVelocity;
+                    pPosition.Y += (float)Math.Sin(pRotation) * pVelocity;
                 }
-            }
-            else
-            {
-                pRotation += (TurnToTarget > 0 ? -1 : 1);
             }
         }
 
-        private double GetTurnDifference()
+        public virtual Boolean OffWorld()
         {
-            //pTarget
-            return 1.0;
+            if (CenterPoint.X < 0 || CenterPoint.Y < 0)
+                return true;
+            else if (CenterPoint.X > TOTile.MAX_WIDTH * 10 || CenterPoint.Y > TOTile.MAX_WIDTH * 10)
+                return true;
+            else
+                return false;
+        }
+
+
+        public float Rotation
+        {
+            get { return pRotation; }
+            set { pRotation = value; }
+        }
+
+        protected float GetTurnDifference()
+        {
+            
+            //Calculate the distance from the square to the mouse's X and Y position
+            float XDistance = pPosition.X - pTarget.Position.X;
+            float YDistance = pPosition.Y - pTarget.Position.Y;
+
+            //Calculate the required rotation by doing a two-variable arc-tan
+            return (float)(Math.Atan2(YDistance, XDistance) - Math.PI / 2);
+
         }
 
         
 
         public virtual void Draw(GameTime aGameTime)
         {
-            if (pTexture != null)
+            if (!bDeleteMe && pTexture != null)
             {
                 SpriteBatch aSpriteBatch = WorldInfo.GetSpriteBatch();
-                aSpriteBatch.Draw(pTexture, BoundingBox, new Rectangle?(pTexture.Bounds), pBackgroundColor, pRotation, new Vector2(0, 0), SpriteEffects.None, 0.0f);
+                aSpriteBatch.Draw(pTexture, CenterPoint, null, pBackgroundColor, pRotation, new Vector2(pTexture.Width / 2, pTexture.Height / 2), 1f, SpriteEffects.None, 0);
             }
         }
 

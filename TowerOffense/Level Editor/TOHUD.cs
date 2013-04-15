@@ -47,9 +47,10 @@ namespace TowerOffense.Level_Editor
             SpriteBatch aSpriteBatch = WorldInfo.GetSpriteBatch();
 
             //Header
+            String Header = "Tower Offense ($" + WorldInfo.Money.ToString() + ")";
             Point TitleBar_Center = TitleBar_Rectangle.Center;
             aSpriteBatch.Draw(TitleBar, TitleBar_Rectangle, Color.White);
-            aSpriteBatch.DrawString(LargeFont, "Tower Offense", new Vector2(TitleBar_Center.X, TitleBar_Center.Y), Color.Black, 0, LargeFont.MeasureString("Tower Offense") / 2, 1.0f, SpriteEffects.None, 1f);
+            aSpriteBatch.DrawString(LargeFont, Header, new Vector2(TitleBar_Center.X, TitleBar_Center.Y), Color.Black, 0, LargeFont.MeasureString(Header) / 2, 1.0f, SpriteEffects.None, 1f);
 
             //Wave Bar
             String GameStatus = GetGameStatus();

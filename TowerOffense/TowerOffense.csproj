@@ -114,6 +114,7 @@
     <Compile Include="Entities\TOBug.cs" />
     <Compile Include="Entities\TOCircle.cs" />
     <Compile Include="Entities\TOItem.cs" />
+    <Compile Include="Entities\TOProjectile.cs" />
     <Compile Include="Entities\TOTower.cs" />
     <Compile Include="Entities\TOWorldInfo.cs" />
     <Compile Include="Level Editor\TOCountdownTimer.cs" />

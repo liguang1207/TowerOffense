@@ -26,15 +26,16 @@ namespace TowerOffense.Level_Editor
     {
         public Vector2 pCenter;
 
-        public int heu;
-        public int cost;
-        public int total;
+        public int H;
+        public int C;
+        public int T;
 
         private Boolean pBlocked = false;
         private Boolean pEndZone = false;
         private Boolean pPath = false;
         private Boolean pClosed = false;
         private Boolean pOpen = true;
+        private TOTile pParent = null;
 
         public TowerState CurrentState = TowerState.Open;
 
@@ -68,15 +69,27 @@ namespace TowerOffense.Level_Editor
             set { pOpen = value; }
         }
 
-
-        public TOTile parentTile;
+        public TOTile Parent
+        {
+            get { return pParent; }
+            set { pParent = value; }
+        }
 
         private TOActor pTower;
+        private TOMobSpawner pSpawner;
 
         public TOTile(Vector2 aPosition, Texture2D aTexture)
             : base(aPosition, aTexture)
         {
             pPosition = aPosition;
+        }
+
+        public override void Update(GameTime aGameTime)
+        {
+            base.Update(aGameTime);
+
+            if (pSpawner != null)
+                pSpawner.Update(aGameTime);
         }
 
         public override void Draw(GameTime aGameTime)
@@ -109,6 +122,12 @@ namespace TowerOffense.Level_Editor
         {
             get { return pTower; }
             set { pTower = value; }
+        }
+
+        public TOMobSpawner Spawner
+        {
+            get { return pSpawner; }
+            set { pSpawner = value; }
         }
     }
 }

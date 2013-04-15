@@ -8,3 +8,5 @@ Content\Tile_Spawn.xnb
 Content\Instructions_LevelSetup.xnb
 Content\Bug_Generic.xnb
 Content\Tower_Generic.xnb
+Content\Projectile_Generic.xnb
+Content\Tower_Shoot_Generic.xnb
