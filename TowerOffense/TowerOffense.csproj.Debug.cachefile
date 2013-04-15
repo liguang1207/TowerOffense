@@ -1,6 +1,5 @@
 Content\HUD_GenericBackground.xnb
 Content\Tile_Default.xnb
-Content\Font_Large.xnb
 Content\Tile_Path.xnb
 Content\Tile_Blocked.xnb
 Content\Tile_EndZone.xnb
@@ -9,4 +8,5 @@ Content\Instructions_LevelSetup.xnb
 Content\Bug_Generic.xnb
 Content\Tower_Generic.xnb
 Content\Projectile_Generic.xnb
+Content\Font_Large.xnb
 Content\Tower_Shoot_Generic.xnb

@@ -27,7 +27,9 @@ namespace TowerOffense.Level_Editor
 
             //Set Path
             TOTile EndZone = GetClosestEndZone();
-            //pPath = AStar(pSpawnZone, EndZone);
+            //Console.WriteLine(pSpawnZone.Position.ToString());
+            //Console.WriteLine(EndZone.Position.ToString());
+            pPath = AStar(pSpawnZone, EndZone);
         }
 
         public void Update(GameTime aGameTime)
@@ -93,7 +95,7 @@ namespace TowerOffense.Level_Editor
 
             int GridLength = 10;
 
-            foreach (TOActor aActor in WorldInfo.AllActors)
+           /* foreach (TOActor aActor in WorldInfo.AllActors)
             {
                 if (aActor is TOTile)
                 {
@@ -105,7 +107,7 @@ namespace TowerOffense.Level_Editor
                     }
                 }
             }
-
+            */
             //Bottom
             if (CurrentX + 1 > -1 && CurrentX + 1 < GridLength && CurrentY > -1 && CurrentY < GridLength && !GameGrid[CurrentX + 1,CurrentY].Blocked && !GameGrid[CurrentX + 1,CurrentY].Closed)
             {
@@ -388,6 +390,10 @@ namespace TowerOffense.Level_Editor
                     if (tempX == CurrentX && tempY == CurrentY)
                     {
                         shortestPath.Reverse();
+                        for (int i = 0; i < shortestPath.Count; i++)
+                        {
+                            Console.WriteLine(shortestPath[i].CenterPoint.ToString());
+                        }
                         break;
                     }
                     shortestPath.Add(GameGrid[tempX,tempY]);

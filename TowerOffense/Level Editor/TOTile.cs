@@ -34,7 +34,7 @@ namespace TowerOffense.Level_Editor
         private Boolean pEndZone = false;
         private Boolean pPath = false;
         private Boolean pClosed = false;
-        private Boolean pOpen = true;
+        private Boolean pOpen = false;
         private TOTile pParent = null;
 
         public TowerState CurrentState = TowerState.Open;
@@ -82,6 +82,8 @@ namespace TowerOffense.Level_Editor
             : base(aPosition, aTexture)
         {
             pPosition = aPosition;
+            pCenter.X = aPosition.X + 32;
+            pCenter.Y = aPosition.Y + 32;
         }
 
         public override void Update(GameTime aGameTime)

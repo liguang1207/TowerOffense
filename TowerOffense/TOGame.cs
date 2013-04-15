@@ -91,7 +91,7 @@ namespace TowerOffense
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    aGameGrid[i, j] = new TOTile(new Vector2(TOTile.MAX_WIDTH * i, TOTile.MAX_WIDTH * j), DefaultTile);
+                    aGameGrid[i, j] = new TOTile(new Vector2(TOTile.MAX_WIDTH * j, TOTile.MAX_WIDTH * i), DefaultTile);
                 }
             }
 
